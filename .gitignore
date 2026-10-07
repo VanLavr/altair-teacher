@@ -1,0 +1,5 @@
+.venv/
+orders-service/
+__pycache__/
+*.pyc
+.env
