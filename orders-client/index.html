@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Заказы — учебный клиент</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Обычный скрипт, без модулей и сборщика: работает при открытии file://. -->
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="eyebrow">Учебный проект</p>
+      <h1>Обработка заказов</h1>
+      <p>Order → Stock → Payment → Delivery → Notification → Order</p>
+    </header>
+
+    <section class="card" aria-labelledby="connection-title">
+      <h2 id="connection-title">Подключение</h2>
+      <label for="api-url">Адрес Order Service</label>
+      <input id="api-url" type="text" value="http://127.0.0.1:8000" placeholder="http://192.168.1.10:8000" spellcheck="false">
+      <p class="hint">Для другого компьютера укажите его IP и порт. Например, 192.168.1.10:8000.</p>
+    </section>
+
+    <section class="card" aria-labelledby="create-title">
+      <h2 id="create-title">Новый заказ</h2>
+      <form id="order-form">
+        <label for="product">Название товара</label>
+        <input id="product" name="product_name" required maxlength="255" value="Pizza">
+        <div class="columns">
+          <div>
+            <label for="quantity">Количество</label>
+            <input id="quantity" name="quantity" type="number" required min="1" max="2147483647" step="1" value="2">
+          </div>
+          <div>
+            <label for="price">Цена за единицу, ₽</label>
+            <input id="price" name="price" type="number" required min="0" max="2147483647" step="1" value="500">
+          </div>
+        </div>
+        <p>Сумма: <strong id="total">1 000 ₽</strong></p>
+        <button type="submit">Создать заказ</button>
+      </form>
+      <p class="hint">До 5 единиц и до 5 000 ₽ — успешный заказ. Больше 5 единиц — отказ склада; сумма больше 5 000 ₽ — отказ оплаты.</p>
+    </section>
+
+    <p id="feedback" class="feedback" role="status" aria-live="polite">Создайте заказ или загрузите список.</p>
+
+    <section class="card" aria-labelledby="orders-title">
+      <div class="section-heading">
+        <h2 id="orders-title">Заказы</h2>
+        <button id="refresh" type="button" class="secondary">Обновить список</button>
+      </div>
+      <form id="lookup-form" class="lookup">
+        <label for="order-id">Найти по ID</label>
+        <input id="order-id" type="number" required min="1" max="2147483647" step="1" placeholder="1">
+        <button type="submit" class="secondary">Найти</button>
+      </form>
+      <pre id="order-details" hidden></pre>
+      <p id="list-info" class="hint">Список ещё не загружен.</p>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>ID</th><th>Товар</th><th>Количество</th><th>Цена</th><th>Сумма</th><th>Статус</th></tr></thead>
+          <tbody id="orders"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

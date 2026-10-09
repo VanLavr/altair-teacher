@@ -5,6 +5,7 @@ import httpx
 import psycopg
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 from .config import Settings, load_settings
 from .controller.routes import router
 from .repository.records import Repository
@@ -27,6 +28,12 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             yield
 
     app = FastAPI(title="Order Service", lifespan=lifespan)
+    # Браузер отправляет Origin: null для страницы, открытой из HTML-файла.
+    # CORS нужен только браузерному клиенту; межсервисный HTTP от него не зависит.
+    app.add_middleware(
+        CORSMiddleware, allow_origins=list(settings.cors_origins),
+        allow_methods=["GET", "POST"], allow_headers=["Content-Type"],
+    )
     app.state.settings = settings
     app.state.repository = Repository(settings.database_url)
     # Здесь ошибки приложения переводятся в HTTP-ответы. Это позволяет

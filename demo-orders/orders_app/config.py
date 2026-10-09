@@ -39,6 +39,7 @@ class Settings:
     port: int
     http_timeout: float
     stock_service_url: str
+    cors_origins: tuple[str, ...] = ("null",)
 
 
 def load_settings(path: Path | None = None, environ: dict | None = None) -> Settings:
@@ -59,4 +60,5 @@ def load_settings(path: Path | None = None, environ: dict | None = None) -> Sett
     return Settings(
         database_url=database_url, host=host, port=port, http_timeout=timeout,
         stock_service_url=service_url(required(values, "STOCK_SERVICE_URL")),
+        cors_origins=tuple(origin.strip() for origin in values.get("CORS_ORIGINS", "null").split(",") if origin.strip()),
     )
